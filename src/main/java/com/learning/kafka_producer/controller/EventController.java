@@ -22,7 +22,7 @@ public class EventController {
 	@GetMapping("/publish/{message}")
 	public ResponseEntity<?> publishMessage(@PathVariable String message) {
 		try {
-			for (int i = 0; i < 100; i++) {
+			for (int i = 0; i < 1000; i++) {
 				publisher.sendMessageToTopic(message + " : " + i);
 			}
 

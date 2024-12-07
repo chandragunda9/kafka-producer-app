@@ -9,7 +9,6 @@ import org.springframework.stereotype.Service;
 
 import com.learning.dto.Student;
 
-
 @Service
 public class KafkaMessagePublisher {
 
@@ -21,30 +20,33 @@ public class KafkaMessagePublisher {
 //		CompletableFuture<SendResult<String, Object>> future = template.send("spring-topic2", message);
 //		CompletableFuture<SendResult<String, Object>> future = template.send("spring-topic3", message);
 //		CompletableFuture<SendResult<String, Object>> future = template.send("spring-topic4", message);
-		CompletableFuture<SendResult<String, Object>> future = template.send("kafka-topic-1", message);
+		CompletableFuture<SendResult<String, Object>> future = template.send("message-topic-1", message);
+//		CompletableFuture<SendResult<String, Object>> future = template.send("message-topic-1", 0, null, message);
 		future.whenComplete((res, ex) -> {
 			if (ex == null) {
 				System.out.println(
 						"Sent message=[" + message + "] with partition=[" + res.getRecordMetadata().partition() + "]");
 				System.out.println(
 						"Sent message=[" + message + "] with offset=[" + res.getRecordMetadata().offset() + "]");
+
 			} else {
-				System.out.println("Unable to sent message - Exception e=["+ex.getMessage()+"]");
+				System.out.println("Unable to sent message - Exception e=[" + ex.getMessage() + "]");
 			}
 		});
 	}
-	
-	
+
 	public void sendEventToStudentTopic(Student student) {
 		CompletableFuture<SendResult<String, Object>> future = template.send("student-topic-2", student);
 		future.whenComplete((res, ex) -> {
 			if (ex == null) {
+				System.out.println("data: " + res.getRecordMetadata());
+				System.out.println("size: " + res.getRecordMetadata().serializedValueSize());
 				System.out.println(
 						"Sent message=[" + student + "] with partition=[" + res.getRecordMetadata().partition() + "]");
 				System.out.println(
 						"Sent message=[" + student + "] with offset=[" + res.getRecordMetadata().offset() + "]");
 			} else {
-				System.out.println("Unable to sent message - Exception e=["+ex.getMessage()+"]");
+				System.out.println("Unable to sent message - Exception e=[" + ex.getMessage() + "]");
 			}
 		});
 	}
